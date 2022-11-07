@@ -1,7 +1,22 @@
 const database = require("./database");
 
 const getUsers = (req, res) => {
-    database.query("SELECT * FROM users").then(([users]) => {
+    let sql2 = "SELECT * FROM users";
+    const sql2Values = [];
+
+    if (req.query.language != null) {
+        sql2 += " where language = ?";
+        sql2Values.push(req.query.language);
+    }
+    if (req.query.city != null) {
+        sql2 += " and city = ?";
+        sql2Values.push(req.query.city);
+    } else if (req.query.city != null) {
+        sql2 += " where city = ?";
+        sql2Values.push(req.query.city);
+    }
+
+    database.query(sql2, sql2Values).then(([users]) => {
         res.json(users);
         res.status(200).send("List of users");
     }).catch((err) => {
