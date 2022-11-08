@@ -1,6 +1,8 @@
 
 const express = require("express");
 
+const { validateMovie, validateUser } = require("./validators.js")
+
 
 const app = express();
 
@@ -27,9 +29,9 @@ app.get("/api/movies/:id", movieHandlers.getMovieById);
 app.get("/api/users", usersHandlers.getUsers);
 app.get("/api/users/:id", usersHandlers.getUsersById);
 
-app.post("/api/movies", movieHandlers.postMovie);
+app.post("/api/movies", validateMovie, movieHandlers.postMovie);
 
-app.post("/api/users", usersHandlers.postUser);
+app.post("/api/users", validateUser, usersHandlers.postUser);
 
 app.put("/api/movies/:id", movieHandlers.updateMovie);
 
@@ -38,6 +40,8 @@ app.put("/api/users/:id", usersHandlers.updateUser);
 app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
 app.delete("/api/users/:id", usersHandlers.deleteUser);
+
+
 
 app.listen(port, (err) => {
   if (err) {
